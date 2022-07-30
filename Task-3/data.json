@@ -1,0 +1,69 @@
+{
+    "categories": ["All", "Korea", "Japan", "China"],
+    "foods": [
+        {
+        "id": 1,
+        "name": "Tteokbokki",
+        "thumbnail": "./img/m1.jpg",
+        "description": "Spicy rice cakes, serving with fish cake.",
+        "price": "10.99"
+    },
+    {
+        "id": 2,
+        "name": "Chicken Ramen",
+        "thumbnail": "./img/m2.jpg",
+        "description": "Chicken noodle soup, serving with vegetables such as soy bean, green onion. In an optional you can ask for egg.",
+        "price": "7.99"
+    },
+    {
+        "id": 3,
+        "name": "Bibimbap",
+        "thumbnail": "./img/m3.jpg",
+        "description": "Boiling vegetables, serving with special hot sauce.",
+        "price": "8.99"
+    },
+    {
+        "id": 4,
+        "name": "Dan Dan Mian",
+        "thumbnail": "./img/m3.jpg",
+        "description": "Dan dan noodle, serving with green onion",
+        "price": "5.99"
+    },
+    {
+        "id": 5,
+        "name": "Yangzhou Fried Rice",
+        "thumbnail": "./img/m5.jpg",
+        "description": "Yangzhou style fried rice, serving with bean and pickles",
+        "price": "12.99"
+    },
+    {
+        "id": 6,
+        "name": "Onigiri",
+        "thumbnail": "./img/m6.jpg",
+        "description": "Rice Sandwich, serving with soy sauce",
+        "price": "9.99"
+    },
+    {
+        "id": 7,
+        "name": "Jajangmyeon",
+        "thumbnail": "./img/m7.jpg",
+        "description": "Black bean sauce noodle, serving with green onion",
+        "price": "15.99"
+    },
+    {
+        "id": 8,
+        "name": "Ma Yi Shang Shu",
+        "thumbnail": "./img/m8.jpg",
+        "description": "Hot pepper sauce noodle, serving with soy bean and onion",
+        "price": "12.99"
+    },
+    {
+        "id": 9,
+        "name": "Doroyaki",
+        "thumbnail": "./img/m9.jpg",
+        "description": "Red bean paste dessert, serving with honey.",
+        "price": "3.99"
+    }
+
+]
+}
