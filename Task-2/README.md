@@ -4,7 +4,8 @@ I built this project for the JS course of Patika.dev platform. This was the last
 
 I've learned a lot when I was building this To-do list app.
 
-#### [Live Demo](https://patika-jstasks.netlify.app/Task-2)
+### <a href="https://patika-jstasks.netlify.app/Task-2" target="_blank">Live Demo</a>
+
 
 ### Preview:
 

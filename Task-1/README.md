@@ -6,6 +6,8 @@ I took user input via `prompt()` function in this project, and used date functio
 **Hint:**
 `clamp()` function that I used in CSS file is to make the font-size responsive relative to viewport size. This function takes three arguments. `clamp(min, preferred, max)`
 
-#### Preview:
+### [Live Demo](https://patika-jstasks.netlify.app/task-1)
+
+### Preview:
 
 ![Homepage](./preview.gif)
