@@ -1,10 +1,12 @@
 //Initialize DOM elemets.
 const componentDOM = document.querySelector(".component");
 const dayOfWeekDOM = document.querySelector(".dayOfWeek");
+const dateDOM = document.querySelector(".date");
 const btnAddTaskDOM = document.querySelector("#addTaskBtn");
 const btnDiscardDOM = document.querySelector(".btn-discard");
 const btnInsertTaskDOM = document.querySelector(".btn-add");
 const modalDOM = document.querySelector(".modal");
+const modalDOMInside = document.querySelector(".modal .add-task");
 const todosDOM = document.querySelector(".todos");
 const taskInputDOM = document.querySelector(".task-input");
 
@@ -12,10 +14,13 @@ const taskInputDOM = document.querySelector(".task-input");
 btnAddTaskDOM.addEventListener("click", addModal);
 btnDiscardDOM.addEventListener("click", discardModal);
 btnInsertTaskDOM.addEventListener("click", addTask);
+window.addEventListener("keyup", (e) => {
+  if (e.which === 13) addTask();
+});
 
-let tasks = JSON.parse(localStorage.getItem("tasks"))
+let tasks = getLocalStorage()
   ? //Check whether local storage is set beforehand or not. If it's not set, then assign the default example data to tasks variable.
-    JSON.parse(localStorage.getItem("tasks"))
+    getLocalStorage()
   : [
       {
         id: 1,
@@ -39,15 +44,35 @@ let tasks = JSON.parse(localStorage.getItem("tasks"))
       },
     ];
 
-localStorage.setItem("tasks", JSON.stringify(tasks)); //Stores "tasks" list in local storage.
+setLocalStorage(); //Stores "tasks" list in local storage.
 
 //Call functions to display data at startup.
-setDay();
+setDate();
 displayTasks();
 
 //Set current day and current date for the top section of component.
-function setDay() {
+function setDate() {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   let date = new Date();
+  let day = date.getDate();
+  let year = date.getFullYear();
+  let month = monthNames[date.getMonth()];
+
+  dateDOM.innerHTML = `${month} ${day}, ${year}`;
 
   //Controls index of days. [0=> Sunday, ..., 6=> Saturday]
   date.getDay() === 0
@@ -67,44 +92,95 @@ function setDay() {
     : (dayOfWeekDOM.innerHTML = "-");
 }
 
-//Display tasks that comes from local storage.
-function displayTasks() {
-  tasks = JSON.parse(localStorage.getItem("tasks"));
-  todosDOM.innerHTML = "";
-  tasks.forEach((task, index) => {
-    let liDOM = document.createElement("li");
-    liDOM.classList.add("task");
-    task.isDone ? liDOM.classList.add("done") : null; //make the task done
-    let removeIconDOM = document.createElement("span");
-    removeIconDOM.classList.add("task-delete");
-    removeIconDOM.addEventListener("click", () => {
-      taskRemove(task);
+//Set tasks array data into the local storage.
+function setLocalStorage() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+//Get tasks array data from the local storage.
+function getLocalStorage() {
+  return JSON.parse(localStorage.getItem("tasks"));
+}
+
+//Add task to the local storage.
+function addTask() {
+  tasks = getLocalStorage();
+  let taskName = taskInputDOM.value;
+  if (taskName) {
+    tasks.push({
+      id: tasks.lenght > -1 ? tasks.at(-1).id + 1 : 1,
+      //Control if there is an element in the tasks array. if there is, assign the new task's id the last task's id + 1. In this case, ids will be assigned as ordered.
+      name: taskName,
+      isDone: false,
     });
-    liDOM.textContent = task.name;
-    liDOM.addEventListener("click", () => {
-      toggleTaskDone(index);
-    });
-    liDOM.appendChild(removeIconDOM);
-    todosDOM.appendChild(liDOM);
-  });
+    setLocalStorage();
+    displayTasks();
+    discardModal();
+    taskInputDOM.value = "";
+  } else {
+    modalDOMInside.appendChild(addAlert("Task can't be empty."));
+  }
+}
+
+function addAlert(text) {
+  let alert = document.createElement("p");
+  alert.style.margin = ".5rem";
+  alert.style.color = "red";
+  alert.style.fontSize = ".8rem";
+  alert.textContent = text;
+  setTimeout(() => {
+    alert.remove();
+  }, 1500);
+  return alert;
 }
 
 //Removes task
-function taskRemove(task) {
-  const filteredItems = tasks.filter((item) => item !== task);
-  tasks = filteredItems;
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+function taskRemove(index) {
+  tasks = getLocalStorage();
+  tasks.splice(index, 1);
+  setLocalStorage();
   displayTasks();
 }
 
 //Toggles task's isDone property according to its index.
 function toggleTaskDone(index) {
-  tasks = JSON.parse(localStorage.getItem("tasks"));
+  tasks = getLocalStorage();
   !tasks[index].isDone
     ? (tasks[index].isDone = true)
     : (tasks[index].isDone = false);
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+  setLocalStorage();
   displayTasks();
+}
+
+//Display tasks that comes from local storage.
+function displayTasks() {
+  tasks = getLocalStorage();
+  todosDOM.innerHTML = "";
+  if (tasks[0] != undefined) {
+    tasks.forEach((task, index) => {
+      let doneIcon = document.createElement("div");
+      doneIcon.classList.add("task-done");
+      doneIcon.setAttribute("onclick", `toggleTaskDone(${index});`);
+      let liDOM = document.createElement("li");
+      liDOM.classList.add("task");
+      task.isDone ? liDOM.classList.add("done") : null; //make the task done
+      let removeIconDOM = document.createElement("span");
+      removeIconDOM.classList.add("task-delete");
+      removeIconDOM.addEventListener("click", () => {
+        taskRemove(index);
+      });
+      liDOM.appendChild(doneIcon);
+      liDOM.innerHTML += task.name;
+      liDOM.appendChild(removeIconDOM);
+      todosDOM.appendChild(liDOM);
+    });
+  } else {
+    let p = document.createElement("p");
+    p.style.textAlign = "center";
+    p.style.marginBottom = "1rem";
+    p.textContent = "No task yet.";
+    todosDOM.appendChild(p);
+  }
 }
 
 //Make the modal element visible on the screen.
@@ -115,14 +191,4 @@ function addModal() {
 //Make the modal element visible on the screen.
 function discardModal() {
   modalDOM.style.display = "none";
-}
-
-//Add task to the local storage.
-function addTask() {
-  let taskName = taskInputDOM.value;
-  tasks.push({ id: tasks.length + 1, name: taskName, isDone: false });
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  displayTasks();
-  discardModal();
-  taskInputDOM.value = "";
 }

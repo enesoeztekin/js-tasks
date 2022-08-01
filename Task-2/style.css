@@ -63,7 +63,6 @@ main {
     display: flex;
     align-items: center;
     gap: .75rem;
-    cursor: pointer;
 }
 
 .component .todos .task.done {
@@ -71,20 +70,20 @@ main {
     color: gray;
 }
 
-.component .todos .task.done::before {
+.component .todos .task.done .task-done {
     background-color: #e5e5e5;
     background-image: url(./done.svg);
     background-size: cover;
 }
 
-.component .todos .task::before {
-    content: "";
+.component .todos .task .task-done {
     width: 18px;
     height: 18px;
     display: inline-block;
     background-color: #fdb4df;
     position: relative;
     cursor: pointer;
+    z-index: 99;
 }
 
 .component .todos .task .task-delete {
@@ -95,6 +94,7 @@ main {
     background-image: url(./remove.svg);
     background-size: cover;
     z-index: 88;
+    cursor: pointer;
 }
 
 .component>button {
